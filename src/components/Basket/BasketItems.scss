@@ -1,0 +1,73 @@
+.basket__items {
+  h1 {
+    text-align: center;
+  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  button {
+    width: 20%;
+    height: 40px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    transition: 0.5s ease-in;
+    border: 2px solid rgb(218, 154, 154);
+    background-color: rgb(185, 14, 14);
+    color: white;
+    border-radius: 30px;
+  }
+  button:hover {
+    background-color: rgb(163, 63, 63);
+    transition: 0.5s ease-in;
+  }
+  img {
+    width: 100px;
+    height: 100px;
+  }
+  ul {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+    li {
+      border: 1px solid rgb(52, 51, 53);
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+      width: 80%;
+      padding: 8px;
+      strong {
+        color: rgb(119, 77, 161);
+      }
+      .content__delete {
+        width: fit-content;
+        height: fit-content;
+        background-color: red;
+        font-size: 20px;
+      }
+    }
+  }
+}
+
+.basket__count {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  &-ment {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    color: orange;
+    transition: 0.4s ease-in-out;
+    border-radius: 20px;
+  }
+  &-ment:hover {
+    background-color: rgb(108, 105, 105);
+    opacity: 0.6;
+    border-radius: 20px;
+    transition: 0.4s ease-in-out;
+  }
+}
