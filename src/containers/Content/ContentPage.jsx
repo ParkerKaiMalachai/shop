@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { HiOutlineArrowNarrowLeft } from 'react-icons/hi';
-import ContentSub from '../../components/Content/ContentSub';
+import { useParams } from 'react-router-dom';
+import ContentSub from '../../components/Content/ContentSub/ContentSub';
 import ContentTab, { Tab } from '../../components/Content/ContentTab';
-import ContentStarRating from '../../components/Content/ContentStarRating';
-import ContentPopUp from '../../components/Content/ContentPopUp';
+import ContentPopUp from '../../components/Content/ContentPopUp/ContentPopUp';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCardBasket, getCartItemEmpty, getSum } from '../../actions.ts';
-import ContentSimilar from '../../components/Content/ContentSimilar';
-import ContentReviewsCards from '../../components/Content/ContentReviewsCards';
+import { getCardBasket, getSum } from '../../actions.ts';
+import ContentSimilar from '../../components/Content/ContentSimilar/ContentSimilar';
+import ContentReviewsCards from '../../components/Content/ContentReviews/ContentReviewsCards';
+import ContentPageBlocks from '../../components/Content/ContentPage/ContentPageBlocks';
+import ContentPageStarBlock from '../../components/Content/ContentPage/ContentPageStarBlock';
+import ContentPageArrow from '../../components/Content/ContentPage/ContentPageArrow';
+import ContentPageTitle from '../../components/Content/ContentPage/ContentPageTitle';
+import ContentPageImage from '../../components/Content/ContentPage/ContentPageImage';
+import ContentPageBuyBtn from '../../components/Content/ContentPage/ContentPageBuyBtn';
 
 const ContentPage = () => {
   const { isbn13 } = useParams();
   const [currentItem, setCurrentItem] = useState([]);
+
+  const dispatch = useDispatch();
 
   const county = useSelector((state) =>
     state.prodRed.products.find((item) => {
@@ -28,9 +34,13 @@ const ContentPage = () => {
     { aKey: 'url', title: 'URL', content: currentItem.url },
   ];
 
-  const productsItems = useSelector((state) => state.prodRed.products);
+  const blockArray = [
+    { firstLevel: 'Authors', secondLevel: currentItem.authors },
+    { firstLevel: 'Publisher', secondLevel: currentItem.publisher },
+    { firstLevel: 'Language', secondLevel: 'English' },
+    { firstLevel: 'Format', secondLevel: 'Paper book / ebook (PDF)' },
+  ];
 
-  const dispatch = useDispatch();
   const prodCard = {
     image: currentItem.image,
     title: currentItem.title,
@@ -49,48 +59,23 @@ const ContentPage = () => {
       .then((response) => response.json())
       .then((json) => setCurrentItem(json));
   }, [isbn13]);
+
   return (
     <div className="content__page">
-      <Link to="/">
-        <HiOutlineArrowNarrowLeft className="content__page__icon" size={50} />
-      </Link>
+      <ContentPageArrow />
       <div className="container">
-        <h1>{currentItem.title}</h1>
+        <ContentPageTitle title={currentItem.title} />
         <div className="content__wrapper">
-          <div className="content__image">
-            <img src={currentItem.image} alt="" />
-          </div>
+          <ContentPageImage image={currentItem.image} />
           <div className="content__card">
-            <div className="content__card__block">
-              <strong>{currentItem.price}</strong>
-              <ContentStarRating ratingDefault={currentItem.rating} />
-            </div>
-
-            <div className="content__card__block">
-              <p>Authors</p>
-              <strong className="content__card__block__author">{currentItem.authors}</strong>
-            </div>
-
-            <div className="content__card__block">
-              <p>Publisher</p>
-              <strong>{currentItem.publisher}</strong>
-            </div>
-
-            <div className="content__card__block">
-              <p>Language</p>
-              <strong>English</strong>
-            </div>
-
-            <div className="content__card__block">
-              <p>Format</p>
-              <strong>Paper book / ebook (PDF)</strong>
-            </div>
+            <ContentPageStarBlock price={currentItem.price} rating={currentItem.rating} />
+            <ul>
+              {blockArray.map((item) => (
+                <ContentPageBlocks {...item} />
+              ))}
+            </ul>
             <ContentPopUp pages={currentItem.pages} year={currentItem.year} />
-
-            <button onClick={handleBuyProd}>
-              BUY
-              {county && county.countItem > 0 ? <i> + {county.countItem}</i> : ''}
-            </button>
+            <ContentPageBuyBtn county={county} handleBuyProd={handleBuyProd} />
           </div>
         </div>
         <ContentTab activeKey="desc">

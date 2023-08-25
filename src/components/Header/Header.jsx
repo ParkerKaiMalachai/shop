@@ -4,14 +4,13 @@ import glass from '../../assests/glass.png';
 import heart from '../../assests/heart.png';
 import shop from '../../assests/shopping-basket.png';
 import auth from '../../assests/authorize.png';
-import { Route, Routes, Link, Navigate } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import App from '../../App';
-import BasketNotFound from '../Basket/BasketNotFound';
-import BasketItems from '../Basket/BasketItems';
-import Basket from '../../containers/Basket/Basket';
 import { useDispatch, useSelector } from 'react-redux';
-import Favorites from '../../containers/Favorites/Favorites';
 import { getTarget } from '../../actions.ts';
+import HeaderLogo from './HeaderLogo';
+import HeaderSearch from './HeaderSearch';
+import HeaderNav from './HeaderNav';
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -26,47 +25,12 @@ const Header = () => {
   return (
     <div className="header">
       <div className="container">
-        <Link to="/">
-          <div className="header__logo">
-            <img src={logo} alt="" />
-
-            <span>
-              BOOK<strong>STORE</strong>
-            </span>
-          </div>
-        </Link>
+        <HeaderLogo logo={logo} />
         <Routes>
           <Route path="/" element={App} />
         </Routes>
-        <div className="header__search">
-          <img className="header__search__icon" src={glass} alt="" />
-          <input
-            className="header__search__input"
-            type="search"
-            placeholder="Enter to search for a book..."
-            value={query}
-            onChange={(e) => handleTarget(e.target.value)}
-            autoFocus
-          />
-        </div>
-        <div className="header__nav">
-          <div>
-            <Link to="/favorites/">
-              <img src={heart} alt="" />
-            </Link>
-          </div>
-          <div className="header__basket">
-            <Link to="/basket">
-              <img src={shop} alt="" />
-            </Link>
-            <strong>{sortedCount}</strong>
-          </div>
-          <div>
-            <Link to="/login">
-              <img src={auth} alt="" />
-            </Link>
-          </div>
-        </div>
+        <HeaderSearch glass={glass} query={query} handleTarget={handleTarget} />
+        <HeaderNav heart={heart} shop={shop} auth={auth} sortedCount={sortedCount} />
       </div>
     </div>
   );

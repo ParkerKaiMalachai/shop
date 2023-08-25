@@ -5,7 +5,6 @@ import * as yup from 'yup';
 import { Box, Button, FormHelperText, TextField, Typography } from '@mui/material';
 import { TiInputChecked } from 'react-icons/ti';
 import { BsBoxArrowLeft } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
 import users from '../../users.json';
 import classNames from 'classnames';
 
@@ -41,6 +40,7 @@ const LoginPage = (props): JSX.Element => {
   const [style, setStyle] = useState(false);
   const [text, setText] = useState('');
   const [click, setClick] = useState(false);
+  const [password, setPassword] = useState('');
 
   const handleClick = () => {
     setStyle(!style);
@@ -59,7 +59,7 @@ const LoginPage = (props): JSX.Element => {
   return (
     <>
       <form
-        className={classNames('login', { none: foundEmail && style })}
+        className={classNames('login', { none: foundEmail && style && password.length > 5 })}
         onSubmit={handleSubmit(submit)}>
         <FormProvider {...formMethod}>
           <Box display="flex" flexDirection="column" alignItems="center" gap="15px">
@@ -95,7 +95,16 @@ const LoginPage = (props): JSX.Element => {
                 name="passwordValue"
                 render={({ field, fieldState: { error } }) => (
                   <>
-                    <TextField {...field} label="password" type="password" error={!!error} />
+                    <TextField
+                      {...field}
+                      label="password"
+                      type="password"
+                      error={!!error}
+                      value={password}
+                      onChange={(e) => {
+                        setPassword(e.target.value);
+                      }}
+                    />
                     {!!error && <FormHelperText error>Введите свой пароль</FormHelperText>}
                   </>
                 )}

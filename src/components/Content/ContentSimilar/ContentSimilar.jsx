@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { HiOutlineArrowLongLeft } from 'react-icons/hi2';
-import { HiOutlineArrowLongRight } from 'react-icons/hi2';
-import { useNavigate, Link } from 'react-router-dom';
+import ContentSimilarArrows from './ContentSimilarArrows';
+import ContentSimilarMap from './ContentSimilarMap';
 
 const ContentSimilar = ({ ident }) => {
   const [similar, setSimilar] = useState([]);
   const [actualIndex, setActualIndex] = useState(3);
   const [value, setValue] = useState(0);
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('https://api.itbook.store/1.0/search/node.js')
@@ -48,45 +45,20 @@ const ContentSimilar = ({ ident }) => {
 
   return (
     <>
-      <div className="content__capture-arrows">
-        <h1>SIMILAR BOOKS</h1>
-        <div className="content__arrows">
-          <HiOutlineArrowLongLeft
-            className="HiOutlineArrowLongLeft"
-            size={30}
-            onClick={handlePrev}
-            cursor="pointer"
-          />
-          {'           '}
-          <HiOutlineArrowLongRight
-            className="HiOutlineArrowLongRight"
-            size={30}
-            onClick={handleNext}
-            cursor="pointer"
-          />
-        </div>
-      </div>
+      <ContentSimilarArrows handleNext={handleNext} handlePrev={handlePrev} />
       <hr />
       <div className="content__similar">
         <ul className="content__similar__list">
           {similar.map((item) => {
             return (
-              <li
-                className="content__similar__list-li"
-                style={{
-                  transform: `translateX(${-value}%)`,
-                  transition: '0.5s all ease-in-out',
-                  borderBottom: ident === item.isbn13 ? '5px solid orange' : 'none',
-                  backgroundColor: ident === item.isbn13 ? 'MistyRose' : '',
-                }}
-                key={item.isbn13}
-                onClick={() => navigate(`/books/${item.isbn13}`)}>
-                <img src={item.image} alt="" />
-
-                <h5>{item.title}</h5>
-
-                <h6>{item.price}</h6>
-              </li>
+              <ContentSimilarMap
+                isbn13={item.isbn13}
+                image={item.image}
+                title={item.title}
+                price={item.price}
+                ident={ident}
+                value={value}
+              />
             );
           })}
         </ul>

@@ -1,17 +1,8 @@
-import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
-import { HiOutlineArrowNarrowLeft } from 'react-icons/hi';
-import {
-  getCardBasket,
-  getCartEmpty,
-  getCartItemEmpty,
-  getCountDecr,
-  getCountIncr,
-  removeCartItem,
-} from '../../actions.ts';
-import { BsCaretLeftFill } from 'react-icons/bs';
-import { BsFillCaretRightFill } from 'react-icons/bs';
+import { getCartEmpty, getCountDecr, getCountIncr, removeCartItem } from '../../actions.ts';
+import ContentPageArrow from '../Content/ContentPage/ContentPageArrow.jsx';
+import BasketMap from './BasketMap.jsx';
+import BasketTotalInfo from './BasketTotalInfo.jsx';
 const BasketItems = () => {
   const dispatch = useDispatch();
   const products = useSelector((state) => state.prodRed.products);
@@ -24,8 +15,6 @@ const BasketItems = () => {
   const handleEmptyItem = (id) => {
     dispatch(removeCartItem(id));
   };
-
-  const productsItems = useSelector((state) => state.prodRed.products);
 
   const sortedCounts = products.reduce((sum, obj) => {
     return sum + obj.countItem;
@@ -42,40 +31,26 @@ const BasketItems = () => {
   return (
     <>
       <div className="basket__items">
-        <Link to="/">
-          <HiOutlineArrowNarrowLeft className="content__page__icon" size={50} />
-        </Link>
+        <ContentPageArrow />
         <h1>Корзинка</h1>
         <ul>
           {products.map((item) => (
-            <li key={item.id}>
-              <img src={item.image} alt="" />
-              <h3>
-                Title: <strong>{item.title}</strong>
-              </h3>
-              <div className="basket__count">
-                <BsCaretLeftFill
-                  className="basket__count-ment"
-                  onClick={() => handleDecr(item.id)}
-                />
-                <h1>{productsItems.find((el) => el.id === item.id).countItem}</h1>
-                <BsFillCaretRightFill
-                  className="basket__count-ment"
-                  onClick={() => handleIncr(item.id)}
-                />
-              </div>
-              <h4>
-                Price: <strong>{item.price}</strong>
-              </h4>
-              <button className="content__delete" onClick={() => handleEmptyItem(item.id)}>
-                X
-              </button>
-            </li>
+            <BasketMap
+              image={item.image}
+              title={item.title}
+              price={item.price}
+              id={item.id}
+              handleDecr={handleDecr}
+              handleIncr={handleIncr}
+              handleEmptyItem={handleEmptyItem}
+            />
           ))}
         </ul>
-        <h2>Total price: $ {price}</h2>
-        <h2>Total products: {sortedCounts}</h2>
-        <button onClick={handleEmptyCart}>EMPTY CART</button>
+        <BasketTotalInfo
+          price={price}
+          sortedCounts={sortedCounts}
+          handleEmptyCart={handleEmptyCart}
+        />
       </div>
     </>
   );
